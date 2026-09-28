@@ -2,7 +2,7 @@
 
 <p align="center">
   <strong>Des stickers holographiques à paillettes, qu'on décolle du bout de la souris.</strong><br>
-  App macOS et version web.
+  App macOS et version web, <a href="https://ayoubo22.github.io/atelier-sticker-holo/">à essayer en ligne</a>.
 </p>
 
 <p align="center">
@@ -54,6 +54,8 @@ Dans l'app, les réglages et Mes stickers sont gardés d'un lancement à l'autre
 | ⌃⌘F | Plein écran |
 
 ## Version web
+
+Elle tourne en ligne sur **[ayoubo22.github.io/atelier-sticker-holo](https://ayoubo22.github.io/atelier-sticker-holo/)**, publiée par GitHub Pages à chaque modification de `web/`.
 
 [`web/index.html`](web/index.html) contient tout l'atelier dans une seule page : une fois le dépôt cloné, il suffit de l'ouvrir dans un navigateur récent (Safari, Chrome, Edge ou Firefox). Les polices viennent de Google Fonts, il faut donc être en ligne. Mes stickers est gardé dans le navigateur. Sans WebGL, l'atelier passe à un rendu simplifié.
 
