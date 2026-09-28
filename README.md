@@ -17,8 +17,8 @@ On écrit son texte, on choisit la police, les couleurs, la matière et la forme
 
 - **Texte** : texte principal et bandeau, bandeau en pilule, en ruban ou sans fond, tout en majuscules si on veut.
 - **Lettrage et relief** : 12 polices d'affiche (rétro, bulle, arcade, cartoon, script, pinceau, western, pixel, horreur, enseigne, épais, chewy) et 4 polices pour le bandeau, taille, espacement des lettres, texte en arc vers le haut ou vers le bas, épaisseur du contour, profondeur 3D.
-- **Couleurs** : 10 palettes (Soleil, Lagon, Bonbon, Chrome, Menthe, Lave, Nuit, Pastel, Néon, Pêche), puis chacune des 8 couleurs à la main : le dégradé des lettres en trois tons, le contour, le bandeau, son texte et les décorations. Les lettres peuvent être en dégradé, unies, en paillettes nacrées, ou évidées pour laisser voir la matière du sticker.
-- **Matière** : holo, or, argent, or rose, cuivre, opale, galaxie, prisme, vinyle blanc ou vinyle clair, avec les reflets, la taille des paillettes et le scintillement.
+- **Couleurs** : 15 palettes, des vives (Soleil, Lagon, Bonbon, Chrome, Menthe, Lave, Nuit, Pastel, Néon, Pêche) aux sobres (Encre, Ardoise, Marine, Forêt, Ring), puis chacune des 8 couleurs à la main : le dégradé des lettres en trois tons, le contour, le bandeau, son texte et les décorations. Les lettres peuvent être en dégradé, unies, en paillettes nacrées, ou évidées pour laisser voir la matière du sticker.
+- **Matière** : holo, or, argent, or rose, cuivre, opale, galaxie, prisme, vinyle blanc, vinyle brillant ou vinyle clair, avec les reflets, la taille des paillettes et le scintillement.
 - **Découpe** : à la forme des lettres, arrondie, en capsule, en rectangle, en ovale, en cercle, en éclat ou en nuage, avec une marge réglable.
 - **Décorations** : de chaque côté du texte, un éclair, une pastille « validé », un cœur, une étoile, une couronne, une flamme, une tasse de café, une balise `</>`, un smiley ou n'importe quel emoji, et des confettis autour du bandeau.
 - **Plan de travail** : tapis de découpe vert ou bleu, liège, alu ou nuit, et un léger mouvement au repos.
@@ -66,6 +66,7 @@ L'atelier tient dans un seul fichier, `Resources/atelier.html`, sans bibliothèq
 - **L'encre** est dessinée en Canvas 2D : chaque lettre est posée sur l'arc, puis viennent le contour, le relief 3D, les reflets et les ombres.
 - **La découpe** part de la silhouette de l'encre. Une transformée de distance euclidienne exacte (algorithme de Felzenszwalb et Huttenlocher) donne un champ de distance signé : la marge est un seuil sur ce champ, une fermeture morphologique adoucit les creux et les trous intérieurs sont bouchés. Le même champ sert au bord blanc, à l'ombre et aux normales du décollage.
 - **Les paillettes** sont un shader WebGL : des cellules de Voronoï, chacune inclinée au hasard, renvoient un reflet très serré et une couleur irisée qui dépend de l'angle entre la lumière et le regard. Le sticker s'incline avec la souris, alors elles scintillent.
+- **Le vinyle brillant** est un vernis posé sur le support et l'encre : le shader y trace le reflet d'une fenêtre, une bande de lumière en diagonale qui suit la lumière, donc la souris.
 - **Le décollage** plie le sticker autour d'un cylindre qui suit le pointeur. Pour chaque pixel, le shader décide s'il est encore collé, dans le rouleau ou sur le rabat retourné, qui montre le dos blanc de l'adhésif, et dessine l'ombre du rabat. Passé 62 % du sticker, il suffit de lâcher : il part tout seul.
 - **Le PNG** est rendu à plat dans un framebuffer hors écran, relu avec `readPixels` puis écrit avec sa transparence. Dans le navigateur, il passe par `navigator.clipboard` ; dans l'app, un `WKScriptMessageHandler` le confie à `NSPasteboard` ou à un panneau d'enregistrement.
 

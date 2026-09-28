@@ -246,7 +246,7 @@
       <details class="sec" name="sec">
         <summary>Matière</summary>
         <div class="sec-body">
-          <fieldset class="field"><legend class="label">Support</legend><div class="tiles c5" id="tiles-fin"></div></fieldset>
+          <fieldset class="field"><legend class="label">Support</legend><div class="tiles c4" id="tiles-fin"></div></fieldset>
           <div class="rng" data-range="flake"></div>
           <div class="rng" data-range="sparkle"></div>
         </div>
@@ -318,7 +318,12 @@ const PALETTES = {
   nuit:   { name:'Nuit',   c:{ f1:'#e4e1ff', f2:'#8f86ff', f3:'#3b2fb8', line:'#0b0820', ribbon:'#f5c542', ribbonText:'#0b0820', accent:'#f5c542', accent2:'#8f86ff' } },
   pastel: { name:'Pastel', c:{ f1:'#fff6d6', f2:'#ffd1dc', f3:'#c8b6ff', line:'#4a3b5c', ribbon:'#9ee6d3', ribbonText:'#4a3b5c', accent:'#ffe3a3', accent2:'#ffb3c6' } },
   neon:   { name:'Néon',   c:{ f1:'#f4ff6b', f2:'#3dff8b', f3:'#18d4ff', line:'#0a0a14', ribbon:'#ff2fd0', ribbonText:'#ffffff', accent:'#ff2fd0', accent2:'#f4ff6b' } },
-  peche:  { name:'Pêche',  c:{ f1:'#fff1e0', f2:'#ffbe8f', f3:'#ff7a6b', line:'#3a1a14', ribbon:'#6b4cff', ribbonText:'#ffffff', accent:'#ffd6a0', accent2:'#ff7a6b' } }
+  peche:  { name:'Pêche',  c:{ f1:'#fff1e0', f2:'#ffbe8f', f3:'#ff7a6b', line:'#3a1a14', ribbon:'#6b4cff', ribbonText:'#ffffff', accent:'#ffd6a0', accent2:'#ff7a6b' } },
+  encre:  { name:'Encre',  c:{ f1:'#50545c', f2:'#2e3137', f3:'#17191d', line:'#0c0d10', ribbon:'#17191d', ribbonText:'#f4f4f2', accent:'#3a3e46', accent2:'#8a9099' } },
+  ardoise:{ name:'Ardoise', c:{ f1:'#7d8a9c', f2:'#56647a', f3:'#37445a', line:'#151b26', ribbon:'#37445a', ribbonText:'#eef1f5', accent:'#9fb0c4', accent2:'#56647a' } },
+  marine: { name:'Marine', c:{ f1:'#43618f', f2:'#2a4470', f3:'#182a4a', line:'#0b1426', ribbon:'#b8955a', ribbonText:'#0b1426', accent:'#b8955a', accent2:'#2a4470' } },
+  foret:  { name:'Forêt',  c:{ f1:'#56785b', f2:'#365540', f3:'#213628', line:'#0e1a12', ribbon:'#cbb88a', ribbonText:'#16261b', accent:'#cbb88a', accent2:'#365540' } },
+  ring:   { name:'Ring',   c:{ f1:'#f5222d', f2:'#e30613', f3:'#c0000f', line:'#111111', ribbon:'#111111', ribbonText:'#ffffff', accent:'#1d5fb8', accent2:'#e30613' } }
 };
 const COLOR_ROLES = [['f1','Haut'],['f2','Milieu'],['f3','Bas'],['line','Contour'],['ribbon','Bandeau'],['ribbonText','Texte du bandeau'],['accent','Déco'],['accent2','Déco 2']];
 const FONTS = {
@@ -351,6 +356,7 @@ const FINISHES = {
   galaxie: { name:'Galaxie', A:[.04,.03,.1], B:[.22,.14,.42], irid:.3, glit:1, spark:1.5, tint:.35, alpha:1, g:'radial-gradient(circle at 30% 30%,#6b4fd8,#1a1040 55%,#07051a)' },
   prisme:  { name:'Prisme', A:[.7,.7,.72], B:[.95,.95,.97], irid:.85, glit:.8, spark:1.1, tint:.6, alpha:1, g:'linear-gradient(135deg,#ff8fb3,#ffe27a 25%,#8dffb0 50%,#7fd4ff 75%,#c79bff)' },
   blanc:   { name:'Vinyle blanc', A:[.965,.965,.955], B:[.965,.965,.955], irid:0, glit:0, spark:0, tint:0, alpha:1, g:'#f6f6f3' },
+  brillant:{ name:'Vinyle brillant', A:[.935,.935,.928], B:[.935,.935,.928], irid:0, glit:0, spark:0, tint:0, alpha:1, gloss:1, g:'linear-gradient(125deg,#e3e6ea 0%,#f7f8f9 30%,#ffffff 38%,#ffffff 44%,#eceef1 52%,#dde1e6 78%,#f3f4f6 100%)' },
   clair:   { name:'Vinyle clair', A:[.9,.93,.97], B:[1,1,1], irid:.1, glit:.25, spark:.7, tint:.3, alpha:.3, g:'repeating-conic-gradient(#dfe5e9 0% 25%, #ffffff 0% 50%) 50% / 12px 12px' }
 };
 const CUTS = {
@@ -756,7 +762,7 @@ const FS_STICKER = FS_HEAD + `
 uniform sampler2D u_ink;
 uniform vec3 u_cam; uniform vec3 u_light; uniform mat3 u_rot;
 uniform float u_aa; uniform float u_cells; uniform float u_aspect;
-uniform vec3 u_matA; uniform vec3 u_matB; uniform float u_irid; uniform float u_glit; uniform float u_spark; uniform float u_tint; uniform float u_matAlpha;
+uniform vec3 u_matA; uniform vec3 u_matB; uniform float u_irid; uniform float u_glit; uniform float u_spark; uniform float u_tint; uniform float u_matAlpha; uniform float u_gloss;
 vec3 gN; vec3 gV; vec3 gL;
 vec3 spectrum(float t){ return 0.5 + 0.5 * cos(6.2831853 * (t + vec3(0.0, 0.33, 0.67))); }
 
@@ -804,6 +810,20 @@ vec4 frontAt(vec2 uv){
   float sp = spark * 2.6 * u_spark * mix(1.0, 0.2 + 0.65 * lum, inkA);
   col += sparkCol * sp;
   col += vec3(pow(max(dot(gN, H), 0.0), 90.0) * 0.28);
+  /* vinyle brillant : un vernis lisse recouvre le support et l'encre. Le reflet d'une fenêtre
+     y dessine une bande de lumière en diagonale, qui suit la lumière et donc la souris. */
+  if (u_gloss > 0.0){
+    float along = 0.819 * (uv.x - 0.5) * u_aspect + 0.574 * (0.5 - uv.y);
+    float halfw = 0.5 * (0.819 * u_aspect + 0.574);
+    vec2 lp = gL.xy / max(gL.z, 0.3);
+    float bx = along - halfw * (1.4 * (0.819 * lp.x + 0.574 * lp.y) - 0.45);
+    float streak = 1.0 - smoothstep(0.035, 0.07, abs(bx));
+    float thin = 1.0 - smoothstep(0.006, 0.018, abs(bx - 0.17));
+    float soft = 1.0 - smoothstep(0.0, 0.4, abs(bx));
+    float fres = pow(1.0 - max(dot(gN, gV), 0.0), 3.0);
+    col = mix(col, vec3(1.0), clamp((streak * 0.7 + thin * 0.4 + soft * 0.1) * u_gloss * (0.9 + 0.5 * fres), 0.0, 0.9));
+    col *= 1.0 - 0.04 * u_gloss * (1.0 - soft);
+  }
   float rim = 1.0 - smoothstep(0.0, 2.5, s);
   col = mix(col, vec3(1.0), rim * 0.22);
   col = min(col, vec3(1.0));
@@ -967,6 +987,7 @@ function drawSticker(o){
   gl.uniform3f(u.u_matA, f.A[0], f.A[1], f.A[2]);
   gl.uniform3f(u.u_matB, f.B[0], f.B[1], f.B[2]);
   gl.uniform1f(u.u_irid, f.irid); gl.uniform1f(u.u_glit, f.glit); gl.uniform1f(u.u_tint, f.tint); gl.uniform1f(u.u_matAlpha, f.alpha);
+  gl.uniform1f(u.u_gloss, f.gloss || 0);
   gl.uniform1f(u.u_spark, f.spark*st.sparkle/60);
   gl.uniform1f(u.u_aa, o.aa);
   gl.uniform1f(u.u_cells, o.cells);
@@ -1347,7 +1368,7 @@ function specs(){
   const dw = S.die.x1 - S.die.x0, dh = S.die.y1 - S.die.y0, fr = n => n.toFixed(1).replace('.', ',');
   const f = FINISHES[st.finish] || FINISHES.holo;
   $('#sp-size').textContent = `7,5 × ${fr(7.5*dh/dw)} cm`;
-  $('#sp-sup').textContent = st.finish === 'blanc' ? 'Vinyle blanc' : st.finish === 'clair' ? 'Vinyle transparent' : st.finish === 'holo' ? 'Vinyle holographique pailleté' : `Vinyle pailleté ${f.name.toLowerCase()}`;
+  $('#sp-sup').textContent = st.finish === 'blanc' ? 'Vinyle blanc' : st.finish === 'brillant' ? 'Vinyle blanc plastifié brillant' : st.finish === 'clair' ? 'Vinyle transparent' : st.finish === 'holo' ? 'Vinyle holographique pailleté' : `Vinyle pailleté ${f.name.toLowerCase()}`;
   $('#sp-cut').textContent = `${(CUTS[st.cut] || CUTS.contour).name}, marge ${fr(S.B/dw*75)} mm`;
 }
 function fontSpecs(){
